@@ -22,3 +22,11 @@
   "Evaluate the body and take a measurement of the time it takes to complete."
   [key & body]
   `(profile* ~key (^:once fn* [] ~@body)))
+
+(defn add-profiling!
+  "Add profiling to a function defined in a var."
+  [var]
+  (let [ns  (-> var .ns .name str)
+        sym (-> var .sym str)
+        key (keyword ns sym)]
+    (alter-var-root var (fn [f] (fn [& args] (profile* key #(apply f args)))))))
