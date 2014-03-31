@@ -8,7 +8,7 @@ from running server applications.
 Add the following dependency to your project.clj file:
 
 ```clojure
-[listora/measure "0.1.0-SNAPSHOT"]
+[listora/measure "0.1.0"]
 ```
 
 ## Usage
