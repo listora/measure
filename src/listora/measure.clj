@@ -22,7 +22,7 @@
   (let [t0  (System/nanoTime)
         ret (func)
         t1  (System/nanoTime)]
-    (measure {key (/ (- t1 t0) 1e9)})
+    (measure {key {:elapsed (/ (- t1 t0) 1e9)}})
     ret))
 
 (defmacro profile

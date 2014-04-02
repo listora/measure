@@ -33,9 +33,11 @@
   (profile :foo (+ 1 1))
   (let [m (<!! measurements)]
     (is (contains? m :foo))
-    (is (number? (:foo m)))
-    (is (< (:foo m) 0.1))
-    (is (> (:foo m) 0.0))))
+    (is (map? (:foo m)))
+    (is (contains? (:foo m) :elapsed))
+    (is (number? (-> m :foo :elapsed)))
+    (is (< (-> m :foo :elapsed) 0.1))
+    (is (> (-> m :foo :elapsed) 0.0))))
 
 (deftest test-add-profiling!
   (defn add-two [x] (+ x 2))
@@ -45,9 +47,11 @@
 
     (let [m (<!! measurements)]
       (is (contains? m :listora.measure-test/add-two))
-      (is (number? (:listora.measure-test/add-two m)))
-      (is (< (:listora.measure-test/add-two m) 0.1))
-      (is (> (:listora.measure-test/add-two m) 0.0)))
+      (is (map? (:listora.measure-test/add-two m)))
+      (is (contains? (:listora.measure-test/add-two m) :elapsed))
+      (is (number? (-> m :listora.measure-test/add-two :elapsed)))
+      (is (< (-> m :listora.measure-test/add-two :elapsed) 0.1))
+      (is (> (-> m :listora.measure-test/add-two :elapsed) 0.0)))
     
     (finally
       (ns-unmap *ns* 'add-two))))

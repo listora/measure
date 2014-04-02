@@ -46,7 +46,12 @@ to execute. A `profile` macro is provided to handle this:
 ```
 
 This will time how long the expression takes to execute, then write a
-measurement with the key `:profile/add`.
+measurement with the key `:profile/add` and the value of a map with an
+`:elapsed` key, measured in seconds, like so:
+
+```clojure
+{:profile/add {:elapsed 0.0001}
+```
 
 It's also possible to add profiling to pre-defined functions:
 
