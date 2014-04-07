@@ -81,6 +81,25 @@ The inner maps will be merged with the outer. This is equivalent to:
 (m/measure {:group :example, :foo 2})
 ```
 
+Sometimes it's useful to combine measurements. The collate macro will
+combine all measurements taken in the body, then send a single
+measurement at the end.
+
+```clojure
+(m/collate merge
+  (m/measure {:foo 1})
+  (m/measure {:bar 2}))
+```
+
+This is equivalent to:
+
+```clojure
+(m/measure (merge {:foo 1} {:bar 2}))
+```
+
+In this example we just use `merge` to combine the measurements, but
+more sophisticated functions can be applied.
+
 
 ## License
 
