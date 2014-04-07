@@ -7,10 +7,26 @@
 
 (def ^:dynamic *measurement* {})
 
+(def ^:dynamic *buffer* nil)
+
 (defn measure
   "Add a measurement map to the measurements channel."
   [measurement]
-  (>!! measurements (merge *measurement* measurement)))
+  (let [m (merge *measurement* measurement)]
+    (if *buffer*
+      (swap! *buffer* conj m)
+      (>!! measurements m))))
+
+(defn collate* [combinef func]
+  (let [buffer (atom [])]
+    (try (binding [*buffer* buffer] (func))
+         (finally (measure (reduce combinef @buffer))))))
+
+(defmacro collate
+  "Any measurement taken in the body will be buffered then combined with the
+  supplied function."
+  [combinef & body]
+  `(collate* ~combinef (^:once fn* [] ~@body)))
 
 (defmacro imply
   "Merges a map with any measurement taken in the body."

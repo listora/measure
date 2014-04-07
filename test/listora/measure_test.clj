@@ -29,6 +29,21 @@
         (measure {:baz 3})
         (is (= (<!! measurements) {:foo 1 :bar 2 :baz 3}))))))
 
+(deftest test-collate
+  (testing "single level"
+    (collate merge
+      (measure {:foo 1})
+      (measure {:bar 2}))
+    (is (= (<!! measurements) {:foo 1 :bar 2})))
+
+  (testing "nested collate"
+    (collate merge
+      (collate merge
+        (measure {:foo 1})
+        (measure {:bar 2}))
+      (measure {:baz 3}))
+    (is (= (<!! measurements) {:foo 1 :bar 2 :baz 3}))))
+
 (deftest test-profile
   (profile :foo (+ 1 1))
   (let [m (<!! measurements)]
