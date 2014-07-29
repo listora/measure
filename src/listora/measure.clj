@@ -47,10 +47,14 @@
   [key & body]
   `(profile* ~key (^:once fn* [] ~@body)))
 
+(defn- default-key [var]
+  (keyword (-> var .ns .name str)
+           (-> var .sym str)))
+
 (defn add-profiling!
   "Add profiling to a function defined in a var."
-  [var]
-  (let [ns  (-> var .ns .name str)
-        sym (-> var .sym str)
-        key (keyword ns sym)]
-    (alter-var-root var (fn [f] (fn [& args] (profile* key #(apply f args)))))))
+  ([var]
+     (add-profiling! var (default-key var)))
+  ([var key]
+     (alter-var-root
+      var (fn [f] (fn [& args] (profile* key #(apply f args)))))))

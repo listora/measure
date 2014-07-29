@@ -54,7 +54,7 @@
     (is (< (-> m :foo :elapsed) 0.1))
     (is (> (-> m :foo :elapsed) 0.0))))
 
-(deftest test-add-profiling!
+(deftest test-add-profiling-of-time-elapsed
   (defn add-two [x] (+ x 2))
   (try
     (add-profiling! #'add-two)
@@ -67,6 +67,25 @@
       (is (number? (-> m :listora.measure-test/add-two :elapsed)))
       (is (< (-> m :listora.measure-test/add-two :elapsed) 0.1))
       (is (> (-> m :listora.measure-test/add-two :elapsed) 0.0)))
-    
+
     (finally
       (ns-unmap *ns* 'add-two))))
+
+(deftest test-add-profiling-measurement-keys
+  (testing "with no explicit key"
+    (try
+      (defn add-two [x] (+ x 2))
+      (add-profiling! #'add-two)
+      (is (= (add-two 3) 5))
+      (is (contains? (<!! measurements) :listora.measure-test/add-two))
+      (finally
+        (ns-unmap *ns* 'add-three))))
+
+  (testing "with a key of :my-metric"
+    (try
+      (defn add-two [x] (+ x 2))
+      (add-profiling! #'add-two :custom)
+      (is (= (add-two 3) 5))
+      (is (contains? (<!! measurements) :custom))
+      (finally
+        (ns-unmap *ns* 'add-three)))))

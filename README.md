@@ -63,7 +63,9 @@ It's also possible to add profiling to pre-defined functions:
 
 This will profile the function `foo` whenever it is invoked. The
 resulting measurement will be stored under the fully qualified name of
-the function; in this case, `:user/foo`.
+the function; in this case, `:user/foo`. An optional second argument
+to `add-profiling!` can be used to name the measurement key
+differently.
 
 Finally, Measure provides a way of adding data to any measurements
 taken within a block.
