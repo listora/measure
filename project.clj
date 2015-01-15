@@ -1,4 +1,4 @@
-(defproject listora/measure "0.1.4-SNAPSHOT"
+(defproject listora/measure "0.1.4"
   :description "A profiling and metrics library"
   :url "https://github.com/listora/measure"
   :license {:name "Eclipse Public License"
